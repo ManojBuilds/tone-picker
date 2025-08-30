@@ -44,33 +44,6 @@ const ControlPannel = () => {
     };
   }, [undo, redo, canUndo, canRedo]);
 
-  const addRevision = useToneStore((state) => state.addRevision);
-  const currentText = useToneStore((state) => state.currentText);
-  const revisions = useToneStore((state) => state.revisions);
-  const currentRevisionIndex = useToneStore(
-    (state) => state.currentRevisionIndex,
-  );
-
-  const currentRevision = revisions[currentRevisionIndex];
-  const hasTextChanged = currentRevision
-    ? currentText !== currentRevision.content
-    : currentText.length > 0;
-
-  const selectedTone = useToneStore((state) => state.selectedTone);
-  const applyTone = useToneStore((state) => state.applyTone);
-
-  const resetAll = useToneStore((state) => state.resetAll);
-
-  const handleTryAgain = () => {
-    if (selectedTone) {
-      applyTone(selectedTone);
-    }
-  };
-
-  const handleDone = () => {
-    resetAll();
-  };
-
   const handleReset = () => {
     reset();
   };
@@ -102,16 +75,6 @@ const ControlPannel = () => {
           <Redo />
         </Button>
       </TooltipWrapper>
-      {/*<Button
-        onClick={handleTryAgain}
-        variant={"outline"}
-        disabled={!selectedTone}
-      >
-        Try Again
-      </Button>
-      <Button onClick={handleDone} variant={"outline"}>
-        Done
-      </Button>*/}
     </div>
   );
 };

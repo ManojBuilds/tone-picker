@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { ToneConfig, TextRevision, AppState } from "@/types";
-import { loadFromStorage, saveToStorage } from "@/utills/storage";
 
 interface ToneStoreActions {
   // Text operations
