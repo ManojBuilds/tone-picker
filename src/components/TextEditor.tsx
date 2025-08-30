@@ -1,19 +1,14 @@
-// src/components/TextEditor.tsx
-
 "use client";
 
 import { useToneStore } from "@/store/useToneStore";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "./ui/textarea";
-// import LoadingSpinner from './ui/LoadingSpinner';
 
 export default function TextEditor() {
   const currentText = useToneStore((state) => state.currentText);
   const updateText = useToneStore((state) => state.updateText);
   const isLoading = useToneStore((state) => state.isLoading);
   const selectedTone = useToneStore((state) => state.selectedTone);
-  const revisions = useToneStore((state) => state.revisions);
-  console.log("Revisions:", revisions);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;

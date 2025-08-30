@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { mistral } from "@ai-sdk/mistral";
 import { generateObject } from "ai";
 import { z } from "zod";
-import { toneCacheMiddleware } from "@/utills/ai";
 
 const toneRequestSchema = z.object({
   text: z
@@ -14,10 +13,6 @@ const toneRequestSchema = z.object({
     label: z.string(),
     description: z.string(),
     prompt: z.string(),
-    position: z.object({
-      x: z.union([z.literal(0), z.literal(1)]),
-      y: z.union([z.literal(0), z.literal(1)]),
-    }),
   }),
 });
 
@@ -38,7 +33,6 @@ export const POST = async (req: Request) => {
   try {
     const requestBody = await req.json();
     const { text, tone } = toneRequestSchema.parse(requestBody);
-    console.log({ text, tone });
 
     const systemPrompt = `You are an expert writing assistant specializing in tone adjustment. Your task is to rewrite text according to specific tone requirements while preserving the original meaning and intent.
 
@@ -62,10 +56,6 @@ Please rewrite this text applying the ${tone.label} tone according to the instru
         mistral: {
           strictJsonSchema: true,
         },
-        toneCacheMiddleware: {
-          text,
-          tone,
-        },
       },
       schema: responseSchema,
       prompt: systemPrompt,
@@ -79,7 +69,6 @@ Please rewrite this text applying the ${tone.label} tone according to the instru
       throw new Error("Generated content is empty");
     }
 
-    console.log(result.object);
     return NextResponse.json({
       success: true,
       content: result.object.rewritten_text,

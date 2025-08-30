@@ -7,7 +7,6 @@ export const TONE_CONFIGS: ToneConfig[] = [
     description: "Professional and structured",
     prompt:
       "Rewrite this text in a formal, professional tone suitable for business communication.",
-    position: { x: 0, y: 0 },
     icon: "📑",
   },
   {
@@ -16,7 +15,6 @@ export const TONE_CONFIGS: ToneConfig[] = [
     description: "Relaxed and conversational",
     prompt:
       "Rewrite this text in a casual, friendly tone as if talking to a friend.",
-    position: { x: 1, y: 0 },
     icon: "😊",
   },
   {
@@ -25,7 +23,6 @@ export const TONE_CONFIGS: ToneConfig[] = [
     description: "Convincing and influential",
     prompt:
       "Rewrite this text in a persuasive, compelling tone that motivates action.",
-    position: { x: 0, y: 1 },
     icon: "🚀",
   },
   {
@@ -34,7 +31,6 @@ export const TONE_CONFIGS: ToneConfig[] = [
     description: "Understanding and supportive",
     prompt:
       "Rewrite this text in an empathetic, warm tone showing understanding and support.",
-    position: { x: 1, y: 1 },
     icon: "❤️",
   },
 ];

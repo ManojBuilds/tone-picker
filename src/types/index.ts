@@ -3,10 +3,6 @@ export interface ToneConfig {
   label: string;
   description: string;
   prompt: string;
-  position: {
-    x: 0 | 1;
-    y: 0 | 1;
-  };
   icon?: string;
 }
 
@@ -14,13 +10,6 @@ export interface TextRevision {
   id: string;
   content: string;
   tone: ToneConfig | null;
-}
-
-export interface APIResponse {
-  success: boolean;
-  content?: string;
-  error?: string;
-  requestId?: string;
 }
 
 export interface ToneRequest {

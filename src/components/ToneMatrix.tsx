@@ -24,10 +24,10 @@ export default function ToneMatrix() {
           onClick={() => handleToneClick(tone)}
           disabled={isLoading || !currentText.trim()}
           variant={selectedTone?.id === tone.id ? "secondary" : "outline"}
-          className="min-h-24 flex flex-col items-center justify-center"
+          className="min-h-16 text-sm sm:text-base sm:min-h-24 flex flex-col items-center justify-center"
         >
           <span className="font-medium">{tone.icon}</span>
-          <span className="text-muted-foreground mt-1 text-center font-semibold">
+          <span className="text-muted-foreground mt-1 text-center font-medium text-sm">
             {tone.label}
           </span>
         </Button>
