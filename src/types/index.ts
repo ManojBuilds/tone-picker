@@ -10,6 +10,7 @@ export interface TextRevision {
   id: string;
   content: string;
   tone: ToneConfig | null;
+  knobIndex: number;
 }
 
 export interface ToneRequest {
@@ -19,6 +20,7 @@ export interface ToneRequest {
 
 export interface AppState {
   currentText: string;
+  knobIndex: number;
   // History for undo and redo
   revisions: TextRevision[];
   currentRevisionIndex: number;

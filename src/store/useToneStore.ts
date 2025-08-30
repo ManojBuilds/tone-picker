@@ -7,6 +7,8 @@ interface ToneStoreActions {
   updateText: (text: string) => void;
   applyTone: (tone: ToneConfig) => Promise<void>;
 
+  updateKnobIndex: (index: number) => void;
+
   // History operations
   addRevision: (content: string, tone: ToneConfig | null) => void;
   undo: () => void;
@@ -31,6 +33,7 @@ export const useToneStore = create<ToneStore>()(
     (set, get) => ({
       // Initial state
       currentText: "",
+      knobIndex: 4, // 4 is the center index 3x3 grid
       revisions: [],
       currentRevisionIndex: -1,
       isLoading: false,
@@ -43,7 +46,9 @@ export const useToneStore = create<ToneStore>()(
       updateText: (text: string) => {
         set({ currentText: text, error: null });
       },
-
+      updateKnobIndex: (index: number) => {
+        set({ knobIndex: index });
+      },
       applyTone: async (tone: ToneConfig) => {
         const state = get();
 
@@ -89,11 +94,13 @@ export const useToneStore = create<ToneStore>()(
               id: `revision-${Date.now()}-initial`,
               content: textToConvert,
               tone: null,
+              knobIndex: 4,
             };
             const newRevision: TextRevision = {
               id: `revision-${Date.now()}`,
               content: result.content,
               tone,
+              knobIndex: state.knobIndex,
             };
             set({
               revisions: [initialRevision, newRevision],
@@ -124,6 +131,7 @@ export const useToneStore = create<ToneStore>()(
           id: `revision-${Date.now()}`,
           content,
           tone,
+          knobIndex: state.knobIndex,
         };
 
         const newRevisions = [
@@ -149,6 +157,7 @@ export const useToneStore = create<ToneStore>()(
             currentText: revision.content,
             currentRevisionIndex: newIndex,
             selectedTone: revision.tone,
+            knobIndex: revision.knobIndex,
             error: null,
           });
         }
@@ -163,6 +172,7 @@ export const useToneStore = create<ToneStore>()(
             currentText: revision.content,
             currentRevisionIndex: newIndex,
             selectedTone: revision.tone,
+            knobIndex: revision.knobIndex,
             error: null,
           });
         }
@@ -180,6 +190,7 @@ export const useToneStore = create<ToneStore>()(
             currentRevisionIndex: 0,
             selectedTone: null,
             error: null,
+            knobIndex: 4,
           });
         }
       },
@@ -194,6 +205,7 @@ export const useToneStore = create<ToneStore>()(
           error: null,
           isBottomBarVisible: true,
           isStopped: false,
+          knobIndex: 4,
         });
       },
 

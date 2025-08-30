@@ -2,7 +2,7 @@
 
 import TextEditor from "@/components/TextEditor";
 import ControlPannel from "@/components/ControlPannel";
-import ToneMatrix from "@/components/ToneMatrix";
+import ToneAdjuster from "@/components/ToneAdjuster";
 import StatusActionBar from "@/components/StatusActionBar";
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
           </div>
 
           <div>
-            <ToneMatrix />
+            <ToneAdjuster />
           </div>
         </div>
         <StatusActionBar />
