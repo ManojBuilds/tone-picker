@@ -15,11 +15,14 @@ interface ToneStoreActions {
   canUndo: () => boolean;
   canRedo: () => boolean;
   reset: () => void;
+  resetAll: () => void;
 
   // UI state operations
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setSelectedTone: (tone: ToneConfig | null) => void;
+  hideBottomBar: () => void;
+  stop: () => void;
 }
 
 type ToneStore = AppState & ToneStoreActions;
@@ -34,6 +37,8 @@ export const useToneStore = create<ToneStore>()(
       isLoading: false,
       selectedTone: null,
       error: null,
+      isBottomBarVisible: true,
+      isStopped: false,
 
       // Text operations
       updateText: (text: string) => {
@@ -52,7 +57,13 @@ export const useToneStore = create<ToneStore>()(
           return;
         }
 
-        set({ isLoading: true, selectedTone: tone, error: null });
+        set({
+          isLoading: true,
+          selectedTone: tone,
+          error: null,
+          isStopped: false,
+          isBottomBarVisible: true,
+        });
 
         try {
           const response = await fetch("/api/tone", {
@@ -63,6 +74,10 @@ export const useToneStore = create<ToneStore>()(
               tone: tone,
             }),
           });
+
+          if (get().isStopped) {
+            return;
+          }
 
           const result = await response.json();
 
@@ -92,11 +107,15 @@ export const useToneStore = create<ToneStore>()(
             get().addRevision(result.content, tone);
           }
         } catch (error) {
-          set({
-            error:
-              error instanceof Error ? error.message : "Unknown error occurred",
-            isLoading: false,
-          });
+          if (!get().isStopped) {
+            set({
+              error:
+                error instanceof Error
+                  ? error.message
+                  : "Unknown error occurred",
+              isLoading: false,
+            });
+          }
         }
       },
 
@@ -166,10 +185,25 @@ export const useToneStore = create<ToneStore>()(
         }
       },
 
+      resetAll: () => {
+        set({
+          currentText: "",
+          revisions: [],
+          currentRevisionIndex: -1,
+          isLoading: false,
+          selectedTone: null,
+          error: null,
+          isBottomBarVisible: true,
+          isStopped: false,
+        });
+      },
+
       // UI operations
       setLoading: (loading: boolean) => set({ isLoading: loading }),
       setError: (error: string | null) => set({ error }),
       setSelectedTone: (tone: ToneConfig | null) => set({ selectedTone: tone }),
+      hideBottomBar: () => set({ isBottomBarVisible: false }),
+      stop: () => set({ isLoading: false, isStopped: true }),
     }),
     {
       name: "tone-store",

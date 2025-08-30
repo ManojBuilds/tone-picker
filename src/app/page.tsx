@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import { useToneStore } from "@/store/useToneStore";
 import TextEditor from "@/components/TextEditor";
 import ControlPannel from "@/components/ControlPannel";
 import ToneMatrix from "@/components/ToneMatrix";
+import BottomTab from "@/components/BottomTab";
 
 export default function TonePickerApp() {
   const error = useToneStore((state) => state.error);
@@ -24,6 +24,7 @@ export default function TonePickerApp() {
             <ToneMatrix />
           </div>
         </div>
+        <BottomTab />
       </div>
     </div>
   );

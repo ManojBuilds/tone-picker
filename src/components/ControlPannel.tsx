@@ -35,11 +35,6 @@ const ControlPannel = () => {
           if (canUndo) undo();
         }
       }
-
-      if (modifierKeyPressed && event.key.toLowerCase() === "r") {
-        event.preventDefault();
-        reset();
-      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -47,7 +42,7 @@ const ControlPannel = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [undo, redo, reset, canUndo, canRedo]);
+  }, [undo, redo, canUndo, canRedo]);
 
   const addRevision = useToneStore((state) => state.addRevision);
   const currentText = useToneStore((state) => state.currentText);
@@ -61,14 +56,23 @@ const ControlPannel = () => {
     ? currentText !== currentRevision.content
     : currentText.length > 0;
 
-  const handleReset = () => {
-    reset();
+  const selectedTone = useToneStore((state) => state.selectedTone);
+  const applyTone = useToneStore((state) => state.applyTone);
+
+  const resetAll = useToneStore((state) => state.resetAll);
+
+  const handleTryAgain = () => {
+    if (selectedTone) {
+      applyTone(selectedTone);
+    }
   };
 
   const handleDone = () => {
-    if (hasTextChanged) {
-      addRevision(currentText, null);
-    }
+    resetAll();
+  };
+
+  const handleReset = () => {
+    reset();
   };
 
   return (
@@ -98,9 +102,16 @@ const ControlPannel = () => {
           <Redo />
         </Button>
       </TooltipWrapper>
-      <Button onClick={handleDone} variant={"outline"} disabled={!hasTextChanged}>
-        Done
+      {/*<Button
+        onClick={handleTryAgain}
+        variant={"outline"}
+        disabled={!selectedTone}
+      >
+        Try Again
       </Button>
+      <Button onClick={handleDone} variant={"outline"}>
+        Done
+      </Button>*/}
     </div>
   );
 };

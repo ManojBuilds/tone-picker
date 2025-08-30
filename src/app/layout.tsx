@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import BottomTab from "@/components/BottomTab";
+import { Toaster } from "sonner";
 
 const geistSans = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -28,12 +30,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative bg-stone-50 z-20`}
       >
         {children}
+
         <div
           style={{
             background: "url('/noise.png')",
           }}
           className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.035]"
         />
+        <Toaster position="top-right" />
       </body>
     </html>
   );

@@ -37,4 +37,6 @@ export interface AppState {
   isLoading: boolean;
   selectedTone: ToneConfig | null;
   error: string | null;
+  isBottomBarVisible: boolean;
+  isStopped: boolean;
 }
