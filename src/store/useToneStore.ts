@@ -157,7 +157,6 @@ export const useToneStore = create<ToneStore>()(
             currentText: revision.content,
             currentRevisionIndex: newIndex,
             selectedTone: revision.tone,
-            knobIndex: revision.knobIndex,
             error: null,
           });
         }
@@ -172,7 +171,6 @@ export const useToneStore = create<ToneStore>()(
             currentText: revision.content,
             currentRevisionIndex: newIndex,
             selectedTone: revision.tone,
-            knobIndex: revision.knobIndex,
             error: null,
           });
         }

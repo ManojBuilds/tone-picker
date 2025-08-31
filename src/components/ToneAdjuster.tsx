@@ -147,10 +147,14 @@ export default function ToneAdjuster() {
             >
               {index === 4 &&
                 (isKnobNotAtCenter && !isDragging ? (
-                  <RotateCw
-                    className="w-5 h-5 text-muted-foreground cursor-pointer"
+                  <Button
+                    variant={"secondary"}
+                    size={"icon"}
                     onClick={handleReset}
-                  />
+                    className="cursor-pointer"
+                  >
+                    <RotateCw className="w-5 h-5 text-muted-foreground opacity-80 " />
+                  </Button>
                 ) : null)}
               <span
                 className={cn(
