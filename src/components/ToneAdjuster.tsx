@@ -2,10 +2,18 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { RotateCw } from "lucide-react";
 import { useToneStore } from "@/store/useToneStore";
 import { ToneConfig } from "@/types";
+import { Button } from "@/components/ui/button";
+
+const presets = [
+  { name: "Executive", index: 0 },
+  { name: "Technical", index: 1 },
+  { name: "Basic", index: 3 },
+  { name: "Educational", index: 2 },
+];
 
 export default function ToneAdjuster() {
   const applyTone = useToneStore((state) => state.applyTone);
@@ -39,6 +47,26 @@ export default function ToneAdjuster() {
     }
   }, [knobIndex]);
 
+  useEffect(() => {
+    const highlightedTones = getHighlightedTones(knobIndex);
+
+    if (highlightedTones.length > 0) {
+      const isSingleTone = highlightedTones.length === 1;
+      const toneLabel = highlightedTones.join(" and ");
+
+      const newToneConfig: ToneConfig = {
+        id: highlightedTones.join("-").toLowerCase(),
+        label: highlightedTones.join(", "),
+        description: isSingleTone
+          ? `A ${toneLabel} tone.`
+          : `A combination of ${toneLabel} tones.`,
+        prompt: `Rewrite this text to be more ${toneLabel}.`,
+        icon: "⚙️",
+      };
+      applyTone(newToneConfig);
+    }
+  }, [knobIndex, applyTone]);
+
   const handleDragEnd = (event: any, info: any) => {
     setIsDragging(false);
     if (!containerRef.current) return;
@@ -56,24 +84,6 @@ export default function ToneAdjuster() {
 
     const index = row * 3 + col;
     updateKnobIndex(index);
-
-    const highlightedTones = getHighlightedTones(index);
-
-    if (highlightedTones.length > 0) {
-      const isSingleTone = highlightedTones.length === 1;
-      const toneLabel = highlightedTones.join(" and ");
-
-      const newToneConfig: ToneConfig = {
-        id: highlightedTones.join("-").toLowerCase(),
-        label: highlightedTones.join(", "),
-        description: isSingleTone
-          ? `A ${toneLabel} tone.`
-          : `A combination of ${toneLabel} tones.`,
-        prompt: `Rewrite this text to be more ${toneLabel}.`,
-        icon: "⚙️",
-      };
-      applyTone(newToneConfig);
-    }
   };
 
   const renderTone = (index: number) => {
@@ -119,70 +129,89 @@ export default function ToneAdjuster() {
   };
 
   return (
-    <div ref={containerRef} className="w-full aspect-square relative">
-      <div className="w-full h-full grid grid-cols-3 grid-rows-3 border border-gray-100 rounded-lg overflow-hidden">
-        {new Array(9).fill(null).map((_, index) => (
-          <div
-            key={index}
-            className={cn(
-              "h-full aspect-square bg-gray-50 border border-gray-100 text-sm flex items-center justify-center p-2",
-              {
-                "items-start": index === 1,
-                "items-end": index === 7,
-                "-rotate-90 items-start": index === 3,
-                "rotate-90 items-start": index === 5,
-              },
-            )}
-          >
-            {index === 4 &&
-              (isKnobNotAtCenter && !isDragging ? (
-                <RotateCw
-                  className="w-5 h-5 text-muted-foreground cursor-pointer"
-                  onClick={handleReset}
-                />
-              ) : null)}
-            <span
+    <div className="w-full">
+      <div ref={containerRef} className="w-full aspect-square relative">
+        <div className="w-full h-full grid grid-cols-3 grid-rows-3 border border-gray-100 rounded-lg overflow-hidden">
+          {new Array(9).fill(null).map((_, index) => (
+            <div
+              key={index}
               className={cn(
-                "text-muted-foreground transition-colors duration-300",
+                "h-full aspect-square bg-gray-50 border border-gray-100 text-sm flex items-center justify-center p-2",
                 {
-                  "text-primary font-bold": highlightedTones.includes(
-                    renderTone(index),
-                  ),
+                  "items-start": index === 1,
+                  "items-end": index === 7,
+                  "-rotate-90 items-start": index === 3,
+                  "rotate-90 items-start": index === 5,
                 },
               )}
             >
-              {renderTone(index)}
-            </span>
-          </div>
+              {index === 4 &&
+                (isKnobNotAtCenter && !isDragging ? (
+                  <RotateCw
+                    className="w-5 h-5 text-muted-foreground cursor-pointer"
+                    onClick={handleReset}
+                  />
+                ) : null)}
+              <span
+                className={cn(
+                  "text-muted-foreground transition-colors duration-300",
+                  {
+                    "text-primary font-bold": highlightedTones.includes(
+                      renderTone(index),
+                    ),
+                  },
+                )}
+              >
+                {renderTone(index)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {knobPosition && (
+          <motion.div
+            drag
+            dragConstraints={containerRef}
+            dragElastic={0}
+            dragMomentum={false}
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={handleDragEnd}
+            className="w-8 h-8 bg-primary rounded-full border-4 border-white absolute cursor-grab active:cursor-grabbing shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+            style={{
+              top: 0,
+              left: 0,
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
+            initial={{
+              x: knobPosition.x,
+              y: knobPosition.y,
+            }}
+            animate={{
+              x: knobPosition.x,
+              y: knobPosition.y,
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          />
+        )}
+      </div>
+      <h2 className="text-muted-foreground mt-4">Or pick a preset</h2>
+      <div className="grid grid-cols-2 gap-2 mt-2">
+        {presets.map((preset) => (
+          <Button
+            key={preset.name}
+            variant="outline"
+            size="sm"
+            onClick={() => updateKnobIndex(preset.index)}
+            className={cn(
+              "text-muted-foreground",
+              knobIndex === preset.index && "border-primary text-primary",
+            )}
+          >
+            {preset.name}
+          </Button>
         ))}
       </div>
-
-      {knobPosition && (
-        <motion.div
-          drag
-          dragConstraints={containerRef}
-          dragElastic={0}
-          dragMomentum={false}
-          onDragStart={() => setIsDragging(true)}
-          onDragEnd={handleDragEnd}
-          className="w-8 h-8 bg-primary rounded-full border-4 border-white absolute cursor-grab active:cursor-grabbing shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
-          style={{
-            top: 0,
-            left: 0,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-          initial={{
-            x: knobPosition.x,
-            y: knobPosition.y,
-          }}
-          animate={{
-            x: knobPosition.x,
-            y: knobPosition.y,
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        />
-      )}
     </div>
   );
 }
