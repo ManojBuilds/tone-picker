@@ -4,7 +4,7 @@ This is a solution for the Fiddle Engineering Intern Take Home Test. It's a tool
 
 **[Link to Deployed App](https://tone-picker-ochre.vercel.app/)**
 
-**[Link to Video Recording](https://www.loom.com/share/ffc0ed1ea34c4ef3be47ada07a161af6?sid=bd4afaab-d038-4ed0-b035-61374b7611fe)**
+**[Link to Video Recording](https://www.loom.com/share/cd2fd3fa167f40e9b5604af242d202d2?sid=c4bfb004-1671-4d79-9872-3c06a2b574fc)**
 
 ## Core Functionality
 
@@ -21,6 +21,7 @@ This is a solution for the Fiddle Engineering Intern Take Home Test. It's a tool
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/) with [shadcn/ui](https://ui.shadcn.com/) components.
 - **AI:** [Mistral AI](https://mistral.ai/), Ai SDK by vercel
+- **Animation:** Motion
 - **State Management:** [Zustand](https://github.com/pmndrs/zustand)
 - **Deployment:** [Vercel](https://vercel.com/)
 

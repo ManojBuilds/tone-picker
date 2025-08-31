@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button";
 
 const presets = [
   { name: "Executive", index: 0 },
-  { name: "Technical", index: 1 },
-  { name: "Basic", index: 3 },
-  { name: "Educational", index: 2 },
+  { name: "Technical", index: 2 },
+  { name: "Basic", index: 6 },
+  { name: "Educational", index: 8 },
 ];
 
 export default function ToneAdjuster() {
@@ -199,7 +199,7 @@ export default function ToneAdjuster() {
           />
         )}
       </div>
-      <h2 className="text-muted-foreground mt-4">Or pick a preset</h2>
+      <h2 className="text-muted-foreground mt-4 text-sm">Or pick a preset</h2>
       <div className="grid grid-cols-2 gap-2 mt-2">
         {presets.map((preset) => (
           <Button
